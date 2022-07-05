@@ -32,7 +32,7 @@ const getAllProducts = async (req, res) => {
     const products = await result.sort(sortList);
     res.status(200).json({ nbhits: products.length, products  });
   }else {
-      const products = await result;
+      const products = await result.sort('createdAt');
       res.status(200).json({ nbhits: products.length, products  });
   }
 
