@@ -3,7 +3,10 @@ const Product = require("../models/product");
 const getAllProductsStatic = async (req, res) => {
   const search = "ab";
 
-  const products = await Product.find({}).select('name price');
+  const products = await Product.find({})
+  .sort("name")
+  .select('name price')
+  .limit(3)
 
   res.status(200).json({ products, nbhits: products.length });
 };
@@ -43,7 +46,13 @@ const getAllProducts = async (req, res) => {
     result = result.select(fieldsList);
   }
 
+  //limit
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const startIndex = (page - 1) * limit;
   
+  result = result.skip(startIndex).limit(limit);
+
   const products = await result;
   res.status(200).json({ nbhits: products.length, products  });
 
